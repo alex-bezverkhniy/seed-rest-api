@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"log"
 	"seed-rest-api/internal/user"
 
@@ -26,8 +27,6 @@ func Run() {
 		log.Fatal("Database connection error: $s", err)
 	}
 
-	userRepository := user.NewUserRepository(mariaDB)
-
 	// Create a new Fiber instance
 	app := fiber.New(fiber.Config{
 		AppName:      "Seed REST API",
@@ -50,4 +49,25 @@ func Run() {
 	app.Use(logger.New())
 	app.Use(recover.New())
 	app.Use(requestid.New())
+
+	// Create repositories
+	userRepository := user.NewUserRepository(mariaDB)
+
+	// Create services
+	userService := user.NewUserService(userRepository)
+
+	user.NewUserHandler(app.Group("/api/v1/users"), userService)
+
+	// Prepare an endpoint for 'Not Found'.
+	app.All("*", func(c *fiber.Ctx) error {
+		errorMessage := fmt.Sprintf("Route '%s' does not exist in this API!", c.OriginalURL())
+
+		return c.Status(fiber.StatusNotFound).JSON(&fiber.Map{
+			"status":  "fail",
+			"message": errorMessage,
+		})
+	})
+
+	// Listen to port 8080.
+	log.Fatal(app.Listen(":8080"))
 }
