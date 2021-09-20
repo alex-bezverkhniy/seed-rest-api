@@ -2,7 +2,7 @@ version: "3.9"
 services:
   fiber-application:
     restart: always
-    image: docker-mariadb-clean-arch:latest
+    image: seed-rest-api:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -16,9 +16,9 @@ services:
       - JWT_SECRET=fiber
     networks:
       - application
-    depends_on:
+    depends_on: 
       - mariadb
-    command: ./docker-mariadb-clean-arch
+    command: ./seed-rest-api
 
   mariadb:
     image: mariadb:10.6.3
