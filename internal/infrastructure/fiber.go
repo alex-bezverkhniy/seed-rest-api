@@ -1,6 +1,11 @@
 package infrastructure
 
 import (
+	"log"
+	"seed-rest-api/internal/user"
+
+	_ "github.com/go-sql-driver/mysql"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -14,6 +19,14 @@ import (
 
 // Run Fiber webserver
 func Run() {
+
+	// Try to connect to MariaDB
+	mariaDB, err := ConnectToMariaDB()
+	if err != nil {
+		log.Fatal("Database connection error: $s", err)
+	}
+
+	userRepository := user.NewUserRepository(mariaDB)
 
 	// Create a new Fiber instance
 	app := fiber.New(fiber.Config{
