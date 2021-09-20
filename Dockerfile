@@ -5,7 +5,7 @@ FROM golang:1.16.6 AS api
 WORKDIR /compiler
 
 # Copy dependency locks so we can cache.
-COPY go.mod go.sum .
+COPY go.mod go.sum ./
 
 # Get all of our dependencies.
 RUN go mod download
