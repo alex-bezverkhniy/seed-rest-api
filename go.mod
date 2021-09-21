@@ -3,6 +3,7 @@ module seed-rest-api
 go 1.17
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/andybalholm/brotli v1.0.2 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gofiber/fiber/v2 v2.18.0 // indirect
