@@ -7,6 +7,7 @@ import (
 
 const (
 	QUERY_GET_USERS = "SELECT * FROM users"
+	QUERY_GET_USER  = "SELECT * FROM users WHERE id = ?"
 )
 
 type mariaDBRepository struct {
@@ -44,4 +45,25 @@ func (r *mariaDBRepository) GetUsers(ctx context.Context) (*[]User, error) {
 	}
 
 	return &users, nil
+}
+
+func (r *mariaDBRepository) GetUser(ctx context.Context, userID int) (*User, error) {
+	user := &User{}
+
+	stmt, err := r.maridb.PrepareContext(ctx, QUERY_GET_USER)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	err = stmt.QueryRowContext(ctx, userID).Scan(&user.ID, &user.Name, &user.Address, &user.Created, &user.Modified)
+	if err != nil && err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+
 }
