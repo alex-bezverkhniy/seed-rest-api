@@ -27,15 +27,9 @@ func (m *mockedUserRepository) GetUser(ctx context.Context, userID int) (*User, 
 }
 
 func Test_userService_GetUsers(t *testing.T) {
-	type fields struct {
-		userRepository UserRepository
-	}
+
 	type args struct {
 		ctx context.Context
-	}
-
-	f := fields{
-		// userRepository: mockedUserRepository{},
 	}
 
 	a := args{
@@ -44,16 +38,14 @@ func Test_userService_GetUsers(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    *[]User
 		wantErr bool
 	}{
 		{
-			name:   "Get All Users",
-			fields: f,
-			args:   a,
-			want:   &[]User{*sampleUser},
+			name: "Get All Users",
+			args: a,
+			want: &[]User{*sampleUser},
 		},
 	}
 	for _, tt := range tests {
@@ -78,16 +70,9 @@ func Test_userService_GetUsers(t *testing.T) {
 }
 
 func Test_userService_GetUser(t *testing.T) {
-	type fields struct {
-		userRepository UserRepository
-	}
 	type args struct {
 		ctx    context.Context
 		userID int
-	}
-
-	f := fields{
-		// userRepository: mockedUserRepository{},
 	}
 
 	a := args{
@@ -97,16 +82,14 @@ func Test_userService_GetUser(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		want    *User
 		wantErr bool
 	}{
 		{
-			name:   "Get User by id",
-			fields: f,
-			args:   a,
-			want:   sampleUser,
+			name: "Get User by id",
+			args: a,
+			want: sampleUser,
 		},
 	}
 	for _, tt := range tests {
