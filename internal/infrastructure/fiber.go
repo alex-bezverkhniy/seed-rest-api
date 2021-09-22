@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"fmt"
 	"log"
+	"seed-rest-api/internal/swagger"
 	"seed-rest-api/internal/user"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -56,6 +57,7 @@ func Run() {
 	// Create services
 	userService := user.NewUserService(userRepository)
 
+	swagger.NewSwaggerHandler(app.Group("/swagger"))
 	user.NewUserHandler(app.Group("/api/v1/users"), userService)
 
 	// Prepare an endpoint for 'Not Found'.
