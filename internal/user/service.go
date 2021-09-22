@@ -15,3 +15,7 @@ func NewUserService(r UserRepository) UserService {
 func (s *userService) GetUsers(ctx context.Context) (*[]User, error) {
 	return s.userRepository.GetUsers(ctx)
 }
+
+func (s *userService) GetUser(ctx context.Context, userID int) (*User, error) {
+	return s.userRepository.GetUser(ctx, userID)
+}
