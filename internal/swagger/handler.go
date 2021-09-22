@@ -1,4 +1,4 @@
-package swaggerswag
+package swagger
 
 import (
 	swagger "github.com/arsmn/fiber-swagger/v2"
