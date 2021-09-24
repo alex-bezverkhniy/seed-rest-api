@@ -2,7 +2,6 @@ package infrastructure
 
 import (
 	"fmt"
-	"log"
 	"seed-rest-api/internal/swagger"
 	"seed-rest-api/internal/user"
 
@@ -19,13 +18,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 )
 
-// Setup fiber context
-func Setup() *fiber.App {
-	// Try to connect to MariaDB
-	mariaDB, err := ConnectToMariaDB()
-	if err != nil {
-		log.Fatal("Database connection error: $s", err)
-	}
+// Setup Mocked fiber context
+func SetupMock() *fiber.App {
 
 	// Create a new Fiber instance
 	app := fiber.New(fiber.Config{
@@ -51,10 +45,10 @@ func Setup() *fiber.App {
 	app.Use(requestid.New())
 
 	// Create repositories
-	userRepository := user.NewUserRepository(mariaDB)
+	mockedUserRepository := user.NewMockedUserRepository()
 
 	// Create services
-	userService := user.NewUserService(userRepository)
+	userService := user.NewUserService(mockedUserRepository)
 
 	swagger.NewSwaggerHandler(app.Group("/swagger/*"))
 	user.NewUserHandler(app.Group("/api/v1/users"), userService)
@@ -69,11 +63,4 @@ func Setup() *fiber.App {
 		})
 	})
 	return app
-}
-
-// Run Fiber webserver
-func Run() {
-
-	// Listen to port 8080.
-	log.Fatal(Setup().Listen(":8080"))
 }
