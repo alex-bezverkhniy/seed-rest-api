@@ -5,7 +5,7 @@ start:
 .PHONY: stop
 stop:
 	docker-compose rm -v --force --stop
-	docker image rm docker-mariadb-clean-arch:latest
+	docker image rm seed-rest-api:latest
 
 .PHONY: test
 test:
