@@ -23,7 +23,7 @@ func NewUserHandler(userRoute fiber.Router, us UserService) {
 	}
 
 	userRoute.Get("", handler.getUsers)
-	userRoute.Get("/:userID", handler.getUsers)
+	userRoute.Get("/:userID", handler.getUser)
 }
 
 // Gets  get all users from database
