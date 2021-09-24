@@ -59,6 +59,35 @@ paths:
       summary: Get all users
       tags:
       - users
+    post:
+      consumes:
+      - application/json
+      description: Creates new user
+      parameters:
+      - description: Create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.User'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+      summary: Creates new user
+      tags:
+      - user
   /v1/users/{userId}:
     get:
       consumes:
