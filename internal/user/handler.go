@@ -68,7 +68,7 @@ func (h *UserHandler) getUser(c *fiber.Ctx) error {
 	customContext, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	userId, err := c.ParamsInt("userId")
+	userId, err := c.ParamsInt("userID")
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(ResponseHTTP{
 			Status:  "fail",
