@@ -22,7 +22,6 @@ func TestUserHandler(t *testing.T) {
 		t.Fatalf(err.Error())
 	}
 
-	// mockedBody := bytes.NewReader([]byte("{\"id\":1,\"name\":\"MockedUser\",\"address\":\"TestAddress\"}"))
 	mockedBody := bytes.NewBuffer(mockedBodyBytes)
 
 	tests := []struct {
@@ -43,7 +42,7 @@ func TestUserHandler(t *testing.T) {
 			wantErr:    false,
 			wantStatus: "success",
 			wantCode:   200,
-			wantBody:   "{\"status\":\"success\",\"data\":[{\"id\":1,\"name\":\"MockedUser\",\"address\":\"TestAddress\",\"created\":123,\"modified\":321}]}",
+			wantBody:   `{"status":"success","data":[{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321}]}`,
 		},
 		{
 			name:       "Get user by ID",
@@ -53,7 +52,7 @@ func TestUserHandler(t *testing.T) {
 			wantErr:    false,
 			wantStatus: "success",
 			wantCode:   200,
-			wantBody:   "{\"status\":\"success\",\"data\":{\"id\":1,\"name\":\"MockedUser\",\"address\":\"TestAddress\",\"created\":123,\"modified\":321}}",
+			wantBody:   `{"status":"success","data":{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321}}`,
 		},
 		{
 			name:       "Get user by wrong ID",
@@ -63,7 +62,7 @@ func TestUserHandler(t *testing.T) {
 			wantErr:    false,
 			wantStatus: "faild",
 			wantCode:   400,
-			wantBody:   "{\"status\":\"fail\",\"message\":\"Please specify a valid user ID\"}",
+			wantBody:   `{"status":"fail","message":"Please specify a valid user ID"}`,
 		},
 		{
 			name:       "Get non existing user by ID",
@@ -73,7 +72,7 @@ func TestUserHandler(t *testing.T) {
 			wantErr:    false,
 			wantStatus: "faild",
 			wantCode:   404,
-			wantBody:   "{\"status\":\"fail\",\"message\":\"User with specified ID is not found\"}",
+			wantBody:   `{"status":"fail","message":"User with specified ID is not found"}`,
 		},
 		{
 			name:       "Create new user",
