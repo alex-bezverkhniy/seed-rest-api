@@ -5,6 +5,7 @@ import "context"
 type MockedUserRepository struct {
 	GetUsersCallCount int
 	GetUserCallCount  int
+	CreateUserCount   int
 }
 
 var (
@@ -16,6 +17,7 @@ func NewMockedUserRepository() *MockedUserRepository {
 	return &MockedUserRepository{
 		GetUsersCallCount: 0,
 		GetUserCallCount:  0,
+		CreateUserCount:   0,
 	}
 }
 
@@ -27,4 +29,9 @@ func (m *MockedUserRepository) GetUsers(ctx context.Context) (*[]User, error) {
 func (m *MockedUserRepository) GetUser(ctx context.Context, userID int) (*User, error) {
 	m.GetUserCallCount++
 	return mockedUser, nil
+}
+
+func (m *MockedUserRepository) CreateUser(ctx context.Context, user *User) error {
+	m.CreateUserCount++
+	return nil
 }

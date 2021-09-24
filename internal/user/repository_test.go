@@ -9,6 +9,15 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
+func newSqlMock(t *testing.T) (*sql.DB, sqlmock.Sqlmock) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+
+	return db, mock
+}
+
 func Test_UserRepository_GetUsers(t *testing.T) {
 	type fields struct {
 		maridb *sql.DB
@@ -146,11 +155,50 @@ func Test_mariaDBRepository_GetUser(t *testing.T) {
 	}
 }
 
-func newSqlMock(t *testing.T) (*sql.DB, sqlmock.Sqlmock) {
-	db, mock, err := sqlmock.New()
-	if err != nil {
-		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+func Test_mariaDBRepository_CreateUser(t *testing.T) {
+	type fields struct {
+		maridb *sql.DB
+	}
+	type args struct {
+		ctx  context.Context
+		user *User
 	}
 
-	return db, mock
+	db, mock := newSqlMock(t)
+	defer db.Close()
+	f := fields{
+		maridb: db,
+	}
+
+	a := args{
+		ctx:  context.TODO(),
+		user: mockedUser,
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "Create sample user",
+			fields:  f,
+			args:    a,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mock.ExpectExec("^INSERT INTO users(name, address, created, modified) VALUES ((.*), (.*), (.*), (.*))$")
+
+			r := &mariaDBRepository{
+				maridb: tt.fields.maridb,
+			}
+			if err := r.CreateUser(tt.args.ctx, tt.args.user); (err != nil) != tt.wantErr {
+				t.Errorf("mariaDBRepository.CreateUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
 }
