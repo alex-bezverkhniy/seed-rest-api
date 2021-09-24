@@ -1,0 +1,99 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is Seed API Docs.",
+        "title": "API",
+        "contact": {
+            "name": "Alex Bezverkhniy",
+            "email": "alexandr.bezverkhniy@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api",
+    "paths": {
+        "/v1/users": {
+            "get": {
+                "description": "Get all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/user.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/user.User"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "user.ResponseHTTP": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.User": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "created": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "modified": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

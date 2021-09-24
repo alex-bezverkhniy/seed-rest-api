@@ -1,0 +1,62 @@
+basePath: /api
+definitions:
+  user.ResponseHTTP:
+    properties:
+      data:
+        type: object
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  user.User:
+    properties:
+      address:
+        type: string
+      created:
+        type: integer
+      id:
+        type: integer
+      modified:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact:
+    email: alexandr.bezverkhniy@gmail.com
+    name: Alex Bezverkhniy
+  description: This is Seed API Docs.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: API
+  version: "1.0"
+paths:
+  /v1/users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/user.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/user.User'
+                  type: array
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+      summary: Get all users
+      tags:
+      - users
+swagger: "2.0"

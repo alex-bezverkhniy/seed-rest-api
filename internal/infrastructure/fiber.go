@@ -57,7 +57,7 @@ func Run() {
 	// Create services
 	userService := user.NewUserService(userRepository)
 
-	swagger.NewSwaggerHandler(app.Group("/swagger"))
+	swagger.NewSwaggerHandler(app.Group("/swagger/*"))
 	user.NewUserHandler(app.Group("/api/v1/users"), userService)
 
 	// Prepare an endpoint for 'Not Found'.
