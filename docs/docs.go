@@ -73,6 +73,59 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/v1/users/{userId}": {
+            "get": {
+                "description": "Get user by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get user by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/user.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseHTTP"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseHTTP"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -129,7 +182,7 @@ var SwaggerInfo = swaggerInfo{
 	BasePath:    "/api",
 	Schemes:     []string{},
 	Title:       "API",
-	Description: "This is Seed API Docs.",
+	Description: "This is Seed REST API Docs.",
 }
 
 type s struct{}

@@ -26,7 +26,7 @@ info:
   contact:
     email: alexandr.bezverkhniy@gmail.com
     name: Alex Bezverkhniy
-  description: This is Seed API Docs.
+  description: This is Seed REST API Docs.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -59,4 +59,36 @@ paths:
       summary: Get all users
       tags:
       - users
+  /v1/users/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/user.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+      summary: Get user by ID
+      tags:
+      - user
 swagger: "2.0"
