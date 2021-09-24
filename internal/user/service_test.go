@@ -7,7 +7,6 @@ import (
 )
 
 var (
-	sampleUser = &User{ID: 1, Name: "Test", Address: "TestAddress", Created: 123, Modified: 321}
 	mockedRepo = &MockedUserRepository{}
 )
 

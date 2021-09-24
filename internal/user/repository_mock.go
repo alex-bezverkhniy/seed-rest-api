@@ -8,7 +8,7 @@ type MockedUserRepository struct {
 }
 
 var (
-	mockedUser = &User{ID: 1, Name: "Test", Address: "TestAddress", Created: 123, Modified: 321}
+	mockedUser = &User{ID: 1, Name: "MockedUser", Address: "TestAddress", Created: 123, Modified: 321}
 )
 
 func (m *MockedUserRepository) GetUsers(ctx context.Context) (*[]User, error) {
