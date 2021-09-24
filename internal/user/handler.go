@@ -12,8 +12,8 @@ type UserHandler struct {
 
 type ResponseHTTP struct {
 	Status  string      `json:"status"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Message string      `json:"message,omitempty"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 // Create a new for User
@@ -84,7 +84,7 @@ func (h *UserHandler) getUser(c *fiber.Ctx) error {
 		})
 	}
 
-	if user == nil || user.ID == -1 {
+	if user == nil || user.ID != userId {
 		return c.Status(fiber.StatusNotFound).JSON(ResponseHTTP{
 			Status:  "fail",
 			Message: "User with specified ID is not found",
