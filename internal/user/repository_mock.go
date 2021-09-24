@@ -11,6 +11,14 @@ var (
 	mockedUser = &User{ID: 1, Name: "MockedUser", Address: "TestAddress", Created: 123, Modified: 321}
 )
 
+// Create a new repository with MariaDB as the driver
+func NewMockedUserRepository() *MockedUserRepository {
+	return &MockedUserRepository{
+		GetUsersCallCount: 0,
+		GetUserCallCount:  0,
+	}
+}
+
 func (m *MockedUserRepository) GetUsers(ctx context.Context) (*[]User, error) {
 	m.GetUsersCallCount++
 	return &[]User{*mockedUser}, nil

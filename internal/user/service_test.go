@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	mockedRepo = &MockedUserRepository{}
+	mockedRepo = NewMockedUserRepository()
 )
 
 func Test_userService_GetUsers(t *testing.T) {
