@@ -8,23 +8,8 @@ import (
 
 var (
 	sampleUser = &User{ID: 1, Name: "Test", Address: "TestAddress", Created: 123, Modified: 321}
-	mockedRepo = &mockedUserRepository{}
+	mockedRepo = &MockedUserRepository{}
 )
-
-type mockedUserRepository struct {
-	GetUsersCallCount int
-	GetUserCallCount  int
-}
-
-func (m *mockedUserRepository) GetUsers(ctx context.Context) (*[]User, error) {
-	m.GetUsersCallCount++
-	return &[]User{*sampleUser}, nil
-}
-
-func (m *mockedUserRepository) GetUser(ctx context.Context, userID int) (*User, error) {
-	m.GetUserCallCount++
-	return sampleUser, nil
-}
 
 func Test_userService_GetUsers(t *testing.T) {
 
@@ -45,7 +30,7 @@ func Test_userService_GetUsers(t *testing.T) {
 		{
 			name: "Get All Users",
 			args: a,
-			want: &[]User{*sampleUser},
+			want: &[]User{*mockedUser},
 		},
 	}
 	for _, tt := range tests {
@@ -89,7 +74,7 @@ func Test_userService_GetUser(t *testing.T) {
 		{
 			name: "Get User by id",
 			args: a,
-			want: sampleUser,
+			want: mockedUser,
 		},
 	}
 	for _, tt := range tests {
