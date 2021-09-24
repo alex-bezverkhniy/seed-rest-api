@@ -23,6 +23,7 @@ func NewUserHandler(userRoute fiber.Router, us UserService) {
 	}
 
 	userRoute.Get("", handler.getUsers)
+	userRoute.Post("", handler.createUser)
 	userRoute.Get("/:userID", handler.getUser)
 }
 
@@ -60,8 +61,8 @@ func (h *UserHandler) getUsers(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Success 200 {object} ResponseHTTP{data=user.User}
-// @Success 404 {object} ResponseHTTP{}
-// @Success 400 {object} ResponseHTTP{}
+// @Failure 404 {object} ResponseHTTP{}
+// @Failure 400 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
 // @Router /v1/users/{userId} [get]
 func (h *UserHandler) getUser(c *fiber.Ctx) error {
@@ -94,5 +95,42 @@ func (h *UserHandler) getUser(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(ResponseHTTP{
 		Status: "success",
 		Data:   user,
+	})
+}
+
+// Creates new user in the database
+// @Summary Creates new user
+// @Description Creates new user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param user body user.User true "Create user"
+// @Success 202 {object} ResponseHTTP{}
+// @Failure 400 {object} ResponseHTTP{}
+// @Failure 503 {object} ResponseHTTP{}
+// @Router /v1/users [post]
+func (h *UserHandler) createUser(c *fiber.Ctx) error {
+	customContext, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	var user User
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+
+	err := h.userService.CreateUser(customContext, &user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusAccepted).JSON(ResponseHTTP{
+		Status:  "success",
+		Message: "User created",
 	})
 }

@@ -1,16 +1,30 @@
 package user_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"net/http"
+
 	"seed-rest-api/internal/infrastructure"
+	"seed-rest-api/internal/user"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
+var mockedUser = &user.User{ID: 1, Name: "MockedUser", Address: "TestAddress"}
+
 func TestUserHandler(t *testing.T) {
+	mockedBodyBytes, err := json.Marshal(mockedUser)
+	if err != nil {
+		t.Fatalf(err.Error())
+	}
+
+	// mockedBody := bytes.NewReader([]byte("{\"id\":1,\"name\":\"MockedUser\",\"address\":\"TestAddress\"}"))
+	mockedBody := bytes.NewBuffer(mockedBodyBytes)
+
 	tests := []struct {
 		name       string
 		method     string
@@ -61,6 +75,16 @@ func TestUserHandler(t *testing.T) {
 			wantCode:   404,
 			wantBody:   "{\"status\":\"fail\",\"message\":\"User with specified ID is not found\"}",
 		},
+		{
+			name:       "Create new user",
+			method:     "POST",
+			route:      "/api/v1/users",
+			body:       mockedBody,
+			wantErr:    false,
+			wantStatus: "sucsess",
+			wantCode:   202,
+			wantBody:   `{"status":"success","message":"User created"}`,
+		},
 	}
 
 	app := infrastructure.SetupMock()
@@ -73,6 +97,7 @@ func TestUserHandler(t *testing.T) {
 			tt.route,
 			tt.body,
 		)
+		req.Header.Set("Content-Type", "application/json; charset=UTF-8")
 
 		res, err := app.Test(req, -1)
 
