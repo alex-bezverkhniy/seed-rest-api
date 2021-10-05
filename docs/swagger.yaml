@@ -120,4 +120,33 @@ paths:
       summary: Get user by ID
       tags:
       - user
+    put:
+      consumes:
+      - application/json
+      description: Updates user
+      parameters:
+      - description: Update user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+      summary: Updates user
+      tags:
+      - user
 swagger: "2.0"

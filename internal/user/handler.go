@@ -146,7 +146,7 @@ func (h *UserHandler) createUser(c *fiber.Ctx) error {
 // @Success 200 {object} ResponseHTTP{}
 // @Failure 400 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
-// @Router /v1/users [post]
+// @Router /v1/users/{userId} [put]
 func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 	customContext, cancel := context.WithCancel(context.Background())
 	defer cancel()
