@@ -70,6 +70,10 @@ func Test_UserRepository_GetUsers(t *testing.T) {
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("mariaDBRepository.GetUsers() = %v, want %v", got, tt.want)
 			}
+			// we make sure that all expectations were met
+			if err := mock.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
 		})
 	}
 }
@@ -151,6 +155,10 @@ func Test_mariaDBRepository_GetUser(t *testing.T) {
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("mariaDBRepository.GetUser() = %v, want %v", got, tt.want)
 			}
+			// we make sure that all expectations were met
+			if err := mock.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
 		})
 	}
 }
@@ -203,6 +211,69 @@ func Test_mariaDBRepository_CreateUser(t *testing.T) {
 			}
 			if err := r.CreateUser(tt.args.ctx, tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("mariaDBRepository.CreateUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			// we make sure that all expectations were met
+			if err := mock.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}
+
+func Test_mariaDBRepository_UpdateUser(t *testing.T) {
+	type fields struct {
+		maridb *sql.DB
+	}
+	type args struct {
+		ctx    context.Context
+		user   *User
+		userId int
+	}
+
+	db, mock := newSqlMock(t)
+	defer db.Close()
+	f := fields{
+		maridb: db,
+	}
+
+	a := args{
+		ctx:    context.TODO(),
+		user:   mockedUser,
+		userId: 0,
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "Update sample user",
+			fields:  f,
+			args:    a,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			mock.ExpectBegin()
+			mock.ExpectExec("UPDATE users").
+				WithArgs(tt.args.user.Name, tt.args.user.Address, tt.args.user.Modified, tt.args.userId).
+				WillReturnResult(sqlmock.NewResult(1, 1))
+			mock.ExpectCommit()
+
+			r := &mariaDBRepository{
+				maridb: tt.fields.maridb,
+			}
+			if err := r.UpdateUser(tt.args.ctx, tt.args.userId, tt.args.user); (err != nil) != tt.wantErr {
+				t.Errorf("mariaDBRepository.UpdateUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			// we make sure that all expectations were met
+			if err := mock.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
 			}
 		})
 	}

@@ -9,6 +9,7 @@ const (
 	QUERY_GET_USERS   = "SELECT * FROM users"
 	QUERY_GET_USER    = "SELECT * FROM users WHERE id = ?"
 	QUERY_CREATE_USER = "INSERT INTO users(name, address, created, modified) VALUES ( ?, ?, ?, ? )"
+	QUERY_UPDATE_USER = "UPDATE users SET name = ?, address = ?, modified = ? WHERE id = ?"
 )
 
 type mariaDBRepository struct {
@@ -90,4 +91,25 @@ func (r *mariaDBRepository) CreateUser(ctx context.Context, user *User) error {
 
 	return nil
 
+}
+
+func (r *mariaDBRepository) UpdateUser(ctx context.Context, userID int, user *User) error {
+
+	tx, err := r.maridb.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		switch err {
+		case nil:
+			err = tx.Commit()
+		default:
+			tx.Rollback()
+		}
+	}()
+
+	// name, address, created, modified
+	tx.ExecContext(ctx, QUERY_UPDATE_USER, user.Name, user.Address, user.Modified, userID)
+
+	return nil
 }
