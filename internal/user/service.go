@@ -32,5 +32,5 @@ func (s *userService) CreateUser(ctx context.Context, user *User) error {
 func (s *userService) UpdateUser(ctx context.Context, userID int, user *User) error {
 	user.Modified = time.Now().Unix()
 
-	return s.UpdateUser(ctx, userID, user)
+	return s.userRepository.UpdateUser(ctx, userID, user)
 }

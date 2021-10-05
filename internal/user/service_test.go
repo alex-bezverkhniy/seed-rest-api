@@ -136,7 +136,55 @@ func Test_userService_CreateUser(t *testing.T) {
 				t.Errorf("userService.CreateUser() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if mockedRepo.CreateUserCount != 1 {
-				t.Errorf("Expected userRepository.GetUser() count of calls: %v, but actuall: %v", 1, mockedRepo.CreateUserCount)
+				t.Errorf("Expected userRepository.CreateUser() count of calls: %v, but actuall: %v", 1, mockedRepo.CreateUserCount)
+			}
+		})
+	}
+}
+
+func Test_userService_UpdateUser(t *testing.T) {
+	type fields struct {
+		userRepository UserRepository
+	}
+	type args struct {
+		ctx    context.Context
+		user   *User
+		userID int
+	}
+
+	f := fields{
+		userRepository: mockedRepo,
+	}
+
+	a := args{
+		ctx:    context.TODO(),
+		user:   mockedUser,
+		userID: 1,
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "Update user",
+			fields:  f,
+			args:    a,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &userService{
+				userRepository: tt.fields.userRepository,
+			}
+			if err := s.UpdateUser(tt.args.ctx, tt.args.userID, tt.args.user); (err != nil) != tt.wantErr {
+				t.Errorf("userService.UpdateUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if mockedRepo.UpdateUserCount != 1 {
+				t.Errorf("Expected userRepository.UpdateUser() count of calls: %v, but actuall: %v", 1, mockedRepo.UpdateUserCount)
 			}
 		})
 	}
