@@ -23,7 +23,8 @@ func TestUserHandler(t *testing.T) {
 		t.Fatalf(err.Error())
 	}
 
-	mockedBody := bytes.NewBuffer(mockedBodyBytes)
+	mockedBodyC := bytes.NewBuffer(mockedBodyBytes)
+	mockedBodyU := bytes.NewBuffer(mockedBodyBytes)
 
 	tests := []struct {
 		name       string
@@ -79,11 +80,21 @@ func TestUserHandler(t *testing.T) {
 			name:       "Create new user",
 			method:     "POST",
 			route:      "/api/v1/users",
-			body:       mockedBody,
+			body:       mockedBodyC,
 			wantErr:    false,
 			wantStatus: "sucsess",
 			wantCode:   202,
 			wantBody:   `{"status":"success","message":"User created"}`,
+		},
+		{
+			name:       "Update user",
+			method:     "PUT",
+			route:      "/api/v1/users/1",
+			body:       mockedBodyU,
+			wantErr:    false,
+			wantStatus: "sucsess",
+			wantCode:   200,
+			wantBody:   `{"status":"success","message":"User updated"}`,
 		},
 	}
 

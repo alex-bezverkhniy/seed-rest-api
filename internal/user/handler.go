@@ -25,6 +25,7 @@ func NewUserHandler(userRoute fiber.Router, us UserService) {
 	userRoute.Get("", handler.getUsers)
 	userRoute.Post("", handler.createUser)
 	userRoute.Get("/:userID", handler.getUser)
+	userRoute.Put("/:userID", handler.updateUser)
 }
 
 // Gets  get all users from database
@@ -132,5 +133,50 @@ func (h *UserHandler) createUser(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusAccepted).JSON(ResponseHTTP{
 		Status:  "success",
 		Message: "User created",
+	})
+}
+
+// Updates user in the database
+// @Summary Updates user
+// @Description Updates user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param user body user.User true "Update user"
+// @Success 200 {object} ResponseHTTP{}
+// @Failure 400 {object} ResponseHTTP{}
+// @Failure 503 {object} ResponseHTTP{}
+// @Router /v1/users [post]
+func (h *UserHandler) updateUser(c *fiber.Ctx) error {
+	customContext, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	userID, err := c.ParamsInt("userID")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: "Please specify a valid user ID",
+		})
+	}
+
+	var user User
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+
+	err = h.userService.UpdateUser(customContext, userID, &user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(ResponseHTTP{
+		Status:  "success",
+		Message: "User updated",
 	})
 }
