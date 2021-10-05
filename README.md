@@ -1,0 +1,15 @@
+### Grand access to marinadb root for dev only
+
+get all grants:
+
+```
+SELECT User, Host FROM mysql.user WHERE Host <> 'localhost';
+```
+or
+```
+SELECT User, Host FROM mysql.user;
+```
+change grant
+```
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.1.13' IDENTIFIED BY ''; 
+```
