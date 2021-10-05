@@ -1,3 +1,8 @@
+## Generate docs and spec
+```
+swag init -d ./cmd/seed-rest-api,./internal/user
+```
+
 ## Run app
 ```
 make start
