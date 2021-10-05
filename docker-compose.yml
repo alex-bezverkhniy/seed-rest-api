@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
       target: prod
     ports:
-      - 8080:8080
+      - 8088:8088
     environment:
       - API_USERID=1
       - API_USERNAME=fiber
@@ -27,8 +27,14 @@ services:
       - ./scripts/migrations.sql:/docker-entrypoint-initdb.d/1.sql
     expose:
       - 3306
+    ports: 
+      - 3306:3306
     environment:
-      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=true
+      # - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=true
+      - MYSQL_ROOT_PASSWORD=12345 
+      - MYSQL_USER=fiber
+      - MYSQL_PASSWORD=12345 
+      - MYSQL_DATABASE=fiber_dmca 
     networks:
       - application
 

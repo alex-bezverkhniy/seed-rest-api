@@ -2,6 +2,10 @@
 start:
 	docker-compose up -d --build
 
+.PHONY: db
+db:
+	docker-compose up mariadb
+
 .PHONY: stop
 stop:
 	docker-compose rm -v --force --stop
