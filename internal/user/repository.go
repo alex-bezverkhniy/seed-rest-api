@@ -8,7 +8,7 @@ import (
 const (
 	QUERY_GET_USERS   = "SELECT * FROM users"
 	QUERY_GET_USER    = "SELECT * FROM users WHERE id = ?"
-	QUERY_CREATE_USER = "INSERT INTO users(name, address, created, modified) VALUES (?, ?, ?, ?)"
+	QUERY_CREATE_USER = "INSERT INTO users(name, address, created, modified) VALUES ( ?, ?, ?, ? )"
 )
 
 type mariaDBRepository struct {
@@ -72,16 +72,21 @@ func (r *mariaDBRepository) GetUser(ctx context.Context, userID int) (*User, err
 // Creates a single user in the database
 func (r *mariaDBRepository) CreateUser(ctx context.Context, user *User) error {
 
-	stmt, err := r.maridb.PrepareContext(ctx, QUERY_CREATE_USER)
+	tx, err := r.maridb.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
-	defer stmt.Close()
+	defer func() {
+		switch err {
+		case nil:
+			err = tx.Commit()
+		default:
+			tx.Rollback()
+		}
+	}()
 
-	_, err = stmt.ExecContext(ctx, user.ID, user.Name, user.Address, user.Created, user.Modified)
-	if err != nil {
-		return err
-	}
+	// name, address, created, modified
+	tx.ExecContext(ctx, QUERY_CREATE_USER, user.Name, user.Address, user.Created, user.Modified)
 
 	return nil
 

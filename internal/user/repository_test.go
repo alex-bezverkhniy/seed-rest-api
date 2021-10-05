@@ -191,7 +191,12 @@ func Test_mariaDBRepository_CreateUser(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mock.ExpectExec("^INSERT INTO users(name, address, created, modified) VALUES ((.*), (.*), (.*), (.*))$")
+
+			mock.ExpectBegin()
+			mock.ExpectExec("INSERT INTO users").
+				WithArgs(tt.args.user.Name, tt.args.user.Address, tt.args.user.Created, tt.args.user.Modified).
+				WillReturnResult(sqlmock.NewResult(1, 1))
+			mock.ExpectCommit()
 
 			r := &mariaDBRepository{
 				maridb: tt.fields.maridb,

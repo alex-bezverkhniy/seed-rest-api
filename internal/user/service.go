@@ -1,6 +1,9 @@
 package user
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type userService struct {
 	userRepository UserRepository
@@ -21,5 +24,7 @@ func (s *userService) GetUser(ctx context.Context, userID int) (*User, error) {
 }
 
 func (s *userService) CreateUser(ctx context.Context, user *User) error {
+	user.Created = time.Now().Unix()
+	user.Modified = time.Now().Unix()
 	return s.userRepository.CreateUser(ctx, user)
 }
