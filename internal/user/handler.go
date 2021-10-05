@@ -61,16 +61,17 @@ func (h *UserHandler) getUsers(c *fiber.Ctx) error {
 // @Tags user
 // @Accept json
 // @Produce json
+// @Param userID path int true "User ID"
 // @Success 200 {object} ResponseHTTP{data=user.User}
 // @Failure 404 {object} ResponseHTTP{}
 // @Failure 400 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
-// @Router /v1/users/{userId} [get]
+// @Router /v1/users/{userID} [get]
 func (h *UserHandler) getUser(c *fiber.Ctx) error {
 	customContext, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	userId, err := c.ParamsInt("userID")
+	userID, err := c.ParamsInt("userID")
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(ResponseHTTP{
 			Status:  "fail",
@@ -78,7 +79,7 @@ func (h *UserHandler) getUser(c *fiber.Ctx) error {
 		})
 	}
 
-	user, err := h.userService.GetUser(customContext, userId)
+	user, err := h.userService.GetUser(customContext, userID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
 			Status:  "fail",
@@ -86,7 +87,7 @@ func (h *UserHandler) getUser(c *fiber.Ctx) error {
 		})
 	}
 
-	if user == nil || user.ID != userId {
+	if user == nil || user.ID != userID {
 		return c.Status(fiber.StatusNotFound).JSON(ResponseHTTP{
 			Status:  "fail",
 			Message: "User with specified ID is not found",
@@ -142,11 +143,12 @@ func (h *UserHandler) createUser(c *fiber.Ctx) error {
 // @Tags user
 // @Accept json
 // @Produce json
+// @Param userID path int true "User ID"
 // @Param user body user.User true "Update user"
 // @Success 200 {object} ResponseHTTP{}
 // @Failure 400 {object} ResponseHTTP{}
 // @Failure 503 {object} ResponseHTTP{}
-// @Router /v1/users/{userId} [put]
+// @Router /v1/users/{userID} [put]
 func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 	customContext, cancel := context.WithCancel(context.Background())
 	defer cancel()

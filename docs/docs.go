@@ -118,7 +118,7 @@ var doc = `{
                 }
             }
         },
-        "/v1/users/{userId}": {
+        "/v1/users/{userID}": {
             "get": {
                 "description": "Get user by ID",
                 "consumes": [
@@ -131,6 +131,15 @@ var doc = `{
                     "user"
                 ],
                 "summary": "Get user by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -183,6 +192,13 @@ var doc = `{
                 ],
                 "summary": "Updates user",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Update user",
                         "name": "user",

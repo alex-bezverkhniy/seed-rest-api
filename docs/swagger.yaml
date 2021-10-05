@@ -91,11 +91,17 @@ paths:
       summary: Creates new user
       tags:
       - user
-  /v1/users/{userId}:
+  /v1/users/{userID}:
     get:
       consumes:
       - application/json
       description: Get user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -128,6 +134,11 @@ paths:
       - application/json
       description: Updates user
       parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: integer
       - description: Update user
         in: body
         name: user
