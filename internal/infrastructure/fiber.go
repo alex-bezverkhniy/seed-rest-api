@@ -74,6 +74,6 @@ func Setup() *fiber.App {
 // Run Fiber webserver
 func Run() {
 
-	// Listen to port 8080.
-	log.Fatal(Setup().Listen(":8080"))
+	// Listen to port 8088.
+	log.Fatal(Setup().Listen(":8088"))
 }
