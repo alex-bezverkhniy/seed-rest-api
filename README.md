@@ -1,3 +1,20 @@
+## Run app
+```
+make start
+```
+
+## Stop app
+```
+make stop
+```
+
+## Run DB only
+```
+make db
+```
+
+
+
 ### Grand access to marinadb root for dev only
 
 get all grants:
