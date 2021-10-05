@@ -4,9 +4,9 @@ import "context"
 
 // Represents the 'User' object.
 type User struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	Address  string `json:"address"`
+	ID       int    `json:"id" example:"1"`
+	Name     string `json:"name" example:"SpongeBob SquarePants"`
+	Address  string `json:"address" example:"Pineapple, Bikini Bottom"`
 	Created  int64  `json:"created"`
 	Modified int64  `json:"modified"`
 }

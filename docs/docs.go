@@ -235,19 +235,22 @@ var doc = `{
             "type": "object",
             "properties": {
                 "address": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Pineapple, Bikini Bottom"
                 },
                 "created": {
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "modified": {
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "SpongeBob SquarePants"
                 }
             }
         }

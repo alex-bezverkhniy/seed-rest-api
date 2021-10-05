@@ -12,14 +12,17 @@ definitions:
   user.User:
     properties:
       address:
+        example: Pineapple, Bikini Bottom
         type: string
       created:
         type: integer
       id:
+        example: 1
         type: integer
       modified:
         type: integer
       name:
+        example: SpongeBob SquarePants
         type: string
     type: object
 info:
