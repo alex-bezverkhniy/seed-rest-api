@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 
 	"seed-rest-api/internal/infrastructure"
 	"seed-rest-api/internal/user"
@@ -111,7 +112,24 @@ func TestUserHandler(t *testing.T) {
 		body, err := ioutil.ReadAll(res.Body)
 		assert.Nilf(t, err, tt.name)
 
-		assert.Equalf(t, tt.wantBody, string(body), tt.name)
+		regexpCrd, err := regexp.Compile(`(.*\"created\":)([\d]*)(.*)`)
+		if err != nil {
+			t.Fatal(err)
+
+		}
+
+		gotBody := string(body)
+		tt.wantBody = regexpCrd.ReplaceAllString(tt.wantBody, `$1"000"$3`)
+		gotBody = regexpCrd.ReplaceAllString(gotBody, `$1"000"$3`)
+
+		regexpMdf, err := regexp.Compile(`(.*\"modified\":)([\d]*)(.*)`)
+		if err != nil {
+			t.Fatal(err)
+		}
+		tt.wantBody = regexpMdf.ReplaceAllString(tt.wantBody, `$1"000"$3`)
+		gotBody = regexpMdf.ReplaceAllString(gotBody, `$1"000"$3`)
+
+		assert.Equalf(t, tt.wantBody, gotBody, tt.name)
 
 	}
 }
