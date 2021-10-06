@@ -44,7 +44,7 @@ func TestUserHandler(t *testing.T) {
 			wantErr:    false,
 			wantStatus: "success",
 			wantCode:   200,
-			wantBody:   `{"status":"success","data":[{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321}]}`,
+			wantBody:   `{"status":"success","data":[{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321,"status":0}]}`,
 		},
 		{
 			name:       "Get user by ID",
@@ -54,7 +54,7 @@ func TestUserHandler(t *testing.T) {
 			wantErr:    false,
 			wantStatus: "success",
 			wantCode:   200,
-			wantBody:   `{"status":"success","data":{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321}}`,
+			wantBody:   `{"status":"success","data":{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321,"status":0}}`,
 		},
 		{
 			name:       "Get user by wrong ID",
@@ -114,7 +114,7 @@ func TestUserHandler(t *testing.T) {
 			wantErr:    false,
 			wantStatus: "success",
 			wantCode:   200,
-			wantBody:   `{"status":"success","data":[{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321}]}`,
+			wantBody:   `{"status":"success","data":[{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321,"status":0}]}`,
 		},
 	}
 
