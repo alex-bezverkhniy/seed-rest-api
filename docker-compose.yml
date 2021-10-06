@@ -12,12 +12,14 @@ services:
     environment:
       - API_USERID=1
       - API_USERNAME=fiber
-      - API_PASSWORD=fiber
+      - API_PASSWORD=
       - JWT_SECRET=fiber
     networks:
       - application
     depends_on: 
       - mariadb
+    env_file: 
+        - .env
     command: ./seed-rest-api
 
   mariadb:
