@@ -26,6 +26,7 @@ func NewUserHandler(userRoute fiber.Router, us UserService) {
 	userRoute.Post("", handler.createUser)
 	userRoute.Get("/:userID", handler.getUser)
 	userRoute.Put("/:userID", handler.updateUser)
+	userRoute.Delete("/:userID", handler.deleteUser)
 }
 
 // Gets  get all users from database
@@ -181,4 +182,38 @@ func (h *UserHandler) updateUser(c *fiber.Ctx) error {
 		Status:  "success",
 		Message: "User updated",
 	})
+}
+
+// Deletes user in the database
+// @Summary Deletes user
+// @Description Deletes user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param userID path int true "User ID"
+// @Success 204
+// @Failure 400 {object} ResponseHTTP{}
+// @Failure 503 {object} ResponseHTTP{}
+// @Router /v1/users/{userID} [delete]
+func (h *UserHandler) deleteUser(c *fiber.Ctx) error {
+	customContext, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	userID, err := c.ParamsInt("userID")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: "Please specify a valid user ID",
+		})
+	}
+
+	err = h.userService.DeleteUser(customContext, userID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+
+	return c.SendStatus(fiber.StatusNoContent)
 }

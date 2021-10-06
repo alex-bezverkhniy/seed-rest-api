@@ -96,6 +96,16 @@ func TestUserHandler(t *testing.T) {
 			wantCode:   200,
 			wantBody:   `{"status":"success","message":"User updated"}`,
 		},
+		{
+			name:       "Delete user",
+			method:     "DELETE",
+			route:      "/api/v1/users/1",
+			body:       nil,
+			wantErr:    false,
+			wantStatus: "sucsess",
+			wantCode:   204,
+			wantBody:   ``,
+		},
 	}
 
 	app := infrastructure.SetupMock()

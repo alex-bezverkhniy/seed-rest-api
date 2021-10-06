@@ -278,3 +278,57 @@ func Test_mariaDBRepository_UpdateUser(t *testing.T) {
 		})
 	}
 }
+
+func Test_mariaDBRepository_DeleteUser(t *testing.T) {
+	type fields struct {
+		maridb *sql.DB
+	}
+	type args struct {
+		ctx    context.Context
+		userID int
+	}
+	db, mock := newSqlMock(t)
+	defer db.Close()
+	f := fields{
+		maridb: db,
+	}
+
+	a := args{
+		ctx:    context.TODO(),
+		userID: 0,
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "Delete sample user",
+			fields:  f,
+			args:    a,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mock.ExpectBegin()
+			mock.ExpectExec("DELETE FROM users").
+				WithArgs(tt.args.userID).
+				WillReturnResult(sqlmock.NewResult(1, 1))
+			mock.ExpectCommit()
+
+			r := &mariaDBRepository{
+				maridb: tt.fields.maridb,
+			}
+			if err := r.DeleteUser(tt.args.ctx, tt.args.userID); (err != nil) != tt.wantErr {
+				t.Errorf("mariaDBRepository.DeleteUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			// we make sure that all expectations were met
+			if err := mock.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+		})
+	}
+}

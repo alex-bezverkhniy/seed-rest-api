@@ -189,3 +189,50 @@ func Test_userService_UpdateUser(t *testing.T) {
 		})
 	}
 }
+
+func Test_userService_DeleteUser(t *testing.T) {
+	type fields struct {
+		userRepository UserRepository
+	}
+	type args struct {
+		ctx    context.Context
+		userID int
+	}
+
+	f := fields{
+		userRepository: mockedRepo,
+	}
+
+	a := args{
+		ctx: context.TODO(),
+
+		userID: 1,
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "Delete user",
+			fields:  f,
+			args:    a,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &userService{
+				userRepository: tt.fields.userRepository,
+			}
+			if err := s.DeleteUser(tt.args.ctx, tt.args.userID); (err != nil) != tt.wantErr {
+				t.Errorf("userService.DeleteUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if mockedRepo.DeleteUserCount != 1 {
+				t.Errorf("Expected userRepository.DeleteUser() count of calls: %v, but actuall: %v", 1, mockedRepo.DeleteUserCount)
+			}
+		})
+	}
+}

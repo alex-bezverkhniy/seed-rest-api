@@ -7,6 +7,7 @@ type MockedUserRepository struct {
 	GetUserCallCount  int
 	CreateUserCount   int
 	UpdateUserCount   int
+	DeleteUserCount   int
 }
 
 var (
@@ -20,6 +21,7 @@ func NewMockedUserRepository() *MockedUserRepository {
 		GetUserCallCount:  0,
 		CreateUserCount:   0,
 		UpdateUserCount:   0,
+		DeleteUserCount:   0,
 	}
 }
 
@@ -40,5 +42,10 @@ func (m *MockedUserRepository) CreateUser(ctx context.Context, user *User) error
 
 func (m *MockedUserRepository) UpdateUser(ctx context.Context, userID int, user *User) error {
 	m.UpdateUserCount++
+	return nil
+}
+
+func (m *MockedUserRepository) DeleteUser(ctx context.Context, userID int) error {
+	m.DeleteUserCount++
 	return nil
 }
