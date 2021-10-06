@@ -23,6 +23,7 @@ func NewUserHandler(userRoute fiber.Router, us UserService) {
 	}
 
 	userRoute.Get("", handler.getUsers)
+	userRoute.Get("/status/:status", handler.getUsersByStatus)
 	userRoute.Post("", handler.createUser)
 	userRoute.Get("/:userID", handler.getUser)
 	userRoute.Put("/:userID", handler.updateUser)
@@ -216,4 +217,42 @@ func (h *UserHandler) deleteUser(c *fiber.Ctx) error {
 	}
 
 	return c.SendStatus(fiber.StatusNoContent)
+}
+
+// Gets get all users by status from database
+// @Summary Gets get all users by status
+// @Description Gets get all users by status
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param status path string true "User status"
+// @Success 200 {object} ResponseHTTP{data=[]user.User}
+// @Failure 503 {object} ResponseHTTP{}
+// @Router /v1/users/status/{status} [get]
+func (h *UserHandler) getUsersByStatus(c *fiber.Ctx) error {
+	customContext, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	status := c.Params("status", "active")
+	us := Active
+
+	users, err := h.userService.GetUsersByStatus(customContext, us.FromString(status))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(ResponseHTTP{
+			Status:  "fail",
+			Message: err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(ResponseHTTP{
+		Status: "success",
+		Data:   users,
+	})
 }

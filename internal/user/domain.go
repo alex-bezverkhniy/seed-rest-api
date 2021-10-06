@@ -1,6 +1,10 @@
 package user
 
-import "context"
+import (
+	"context"
+	"fmt"
+	"strings"
+)
 
 // Represents the 'User' object.
 type User struct {
@@ -39,4 +43,24 @@ type UserService interface {
 	CreateUser(ctx context.Context, user *User) error
 	UpdateUser(ctx context.Context, userID int, user *User) error
 	DeleteUser(ctx context.Context, userID int) error
+}
+
+func (s UserStatus) String() string {
+	seasons := [...]string{"active", "blocked", "inactive"}
+	if s < Active || s > Inactive {
+		return fmt.Sprintf("UserStatus(%d)", int(s))
+	}
+	return seasons[s-1]
+}
+
+func (s UserStatus) FromString(str string) UserStatus {
+	switch strings.ToLower(str) {
+	case "active":
+		return Active
+	case "blocked":
+		return Blocked
+	case "inactive":
+		return Inactive
+	}
+	return Active
 }

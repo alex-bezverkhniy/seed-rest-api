@@ -106,6 +106,16 @@ func TestUserHandler(t *testing.T) {
 			wantCode:   204,
 			wantBody:   ``,
 		},
+		{
+			name:       "Get all active users",
+			method:     "GET",
+			route:      "/api/v1/users/status/active",
+			body:       nil,
+			wantErr:    false,
+			wantStatus: "success",
+			wantCode:   200,
+			wantBody:   `{"status":"success","data":[{"id":1,"name":"MockedUser","address":"TestAddress","created":123,"modified":321}]}`,
+		},
 	}
 
 	app := infrastructure.SetupMock()
