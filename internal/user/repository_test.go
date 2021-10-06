@@ -332,3 +332,75 @@ func Test_mariaDBRepository_DeleteUser(t *testing.T) {
 		})
 	}
 }
+
+func Test_mariaDBRepository_GetUsersByStatus(t *testing.T) {
+	type fields struct {
+		maridb *sql.DB
+	}
+	type args struct {
+		ctx    context.Context
+		status UserStatus
+	}
+	db, mock := newSqlMock(t)
+	defer db.Close()
+	columns := []string{"id", "name", "address", "status", "created", "modified"}
+
+	f := fields{
+		maridb: db,
+	}
+
+	a := args{
+		ctx:    context.TODO(),
+		status: Active,
+	}
+
+	tests := []struct {
+		name     string
+		fields   fields
+		args     args
+		mockData []interface{}
+		want     *[]User
+		wantErr  bool
+	}{
+		{
+			name:     "Get all active users",
+			fields:   f,
+			args:     a,
+			mockData: []interface{}{1, "Test", "TestAddress", Active, 123, 321},
+			want:     &[]User{{ID: 1, Name: "Test", Address: "TestAddress", Status: Active, Created: 123, Modified: 321}},
+			wantErr:  false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			prep := mock.ExpectPrepare("^SELECT (.*) FROM users WHERE status = (.*)$")
+			if !tt.wantErr {
+				rows := sqlmock.
+					NewRows(columns)
+				if tt.mockData != nil {
+					rows.AddRow(tt.mockData[0], tt.mockData[1], tt.mockData[2], tt.mockData[3], tt.mockData[4], tt.mockData[5])
+				}
+
+				prep.ExpectQuery().
+					WithArgs(1).
+					WillReturnRows(rows)
+			} else {
+				prep.ExpectQuery().
+					WithArgs(1).
+					WillReturnError(sql.ErrNoRows)
+			}
+
+			r := &mariaDBRepository{
+				maridb: tt.fields.maridb,
+			}
+			got, err := r.GetUsersByStatus(tt.args.ctx, tt.args.status)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("mariaDBRepository.GetUsersByStatus() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("mariaDBRepository.GetUsersByStatus() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

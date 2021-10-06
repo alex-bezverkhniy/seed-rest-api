@@ -3,11 +3,12 @@ package user
 import "context"
 
 type MockedUserRepository struct {
-	GetUsersCallCount int
-	GetUserCallCount  int
-	CreateUserCount   int
-	UpdateUserCount   int
-	DeleteUserCount   int
+	GetUsersCallCount     int
+	GetUserCallCount      int
+	CreateUserCount       int
+	UpdateUserCount       int
+	DeleteUserCount       int
+	GetUsersByStatusCount int
 }
 
 var (
@@ -17,11 +18,12 @@ var (
 // Create a new repository with MariaDB as the driver
 func NewMockedUserRepository() *MockedUserRepository {
 	return &MockedUserRepository{
-		GetUsersCallCount: 0,
-		GetUserCallCount:  0,
-		CreateUserCount:   0,
-		UpdateUserCount:   0,
-		DeleteUserCount:   0,
+		GetUsersCallCount:     0,
+		GetUserCallCount:      0,
+		CreateUserCount:       0,
+		UpdateUserCount:       0,
+		DeleteUserCount:       0,
+		GetUsersByStatusCount: 0,
 	}
 }
 
@@ -48,4 +50,9 @@ func (m *MockedUserRepository) UpdateUser(ctx context.Context, userID int, user 
 func (m *MockedUserRepository) DeleteUser(ctx context.Context, userID int) error {
 	m.DeleteUserCount++
 	return nil
+}
+
+func (m *MockedUserRepository) GetUsersByStatus(ctx context.Context, status UserStatus) (*[]User, error) {
+	m.GetUsersByStatusCount++
+	return &[]User{*mockedUser}, nil
 }

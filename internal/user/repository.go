@@ -6,11 +6,12 @@ import (
 )
 
 const (
-	QUERY_GET_USERS   = "SELECT * FROM users"
-	QUERY_GET_USER    = "SELECT * FROM users WHERE id = ?"
-	QUERY_CREATE_USER = "INSERT INTO users(name, address, created, modified) VALUES ( ?, ?, ?, ? )"
-	QUERY_UPDATE_USER = "UPDATE users SET name = ?, address = ?, modified = ? WHERE id = ?"
-	QUERY_DELETE_USER = "DELETE FROM users WHERE id = ?"
+	QUERY_GET_USERS           = "SELECT * FROM users"
+	QUERY_GET_USERS_BY_STATUS = "SELECT * FROM users WHERE status = ?"
+	QUERY_GET_USER            = "SELECT * FROM users WHERE id = ?"
+	QUERY_CREATE_USER         = "INSERT INTO users(name, address, created, modified) VALUES ( ?, ?, ?, ? )"
+	QUERY_UPDATE_USER         = "UPDATE users SET name = ?, address = ?, modified = ? WHERE id = ?"
+	QUERY_DELETE_USER         = "DELETE FROM users WHERE id = ?"
 )
 
 type mariaDBRepository struct {
@@ -133,4 +134,37 @@ func (r *mariaDBRepository) DeleteUser(ctx context.Context, userID int) error {
 	tx.ExecContext(ctx, QUERY_DELETE_USER, userID)
 
 	return nil
+}
+
+func (r *mariaDBRepository) GetUsersByStatus(ctx context.Context, status UserStatus) (*[]User, error) {
+	stmt, err := r.maridb.PrepareContext(ctx, QUERY_GET_USERS_BY_STATUS)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.QueryContext(ctx, status)
+	if err != nil && err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var users []User
+
+	for res.Next() {
+		user := &User{}
+		err = res.Scan(&user.ID, &user.Name, &user.Address, &user.Status, &user.Created, &user.Modified)
+		if err != nil && err == sql.ErrNoRows {
+			return nil, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, *user)
+	}
+
+	return &users, nil
 }
