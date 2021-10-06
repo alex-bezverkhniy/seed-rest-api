@@ -118,6 +118,59 @@ var doc = `{
                 }
             }
         },
+        "/v1/users/status/{status}": {
+            "get": {
+                "description": "Gets get all users by status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Gets get all users by status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User status",
+                        "name": "status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/user.ResponseHTTP"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/user.User"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseHTTP"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/users/{userID}": {
             "get": {
                 "description": "Get user by ID",
@@ -229,6 +282,45 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Deletes user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Deletes user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseHTTP"
+                        }
+                    },
+                    "503": {
+                        "description": "Service Unavailable",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseHTTP"
+                        }
+                    }
+                }
             }
         }
     },
@@ -267,6 +359,9 @@ var doc = `{
                 "name": {
                     "type": "string",
                     "example": "SpongeBob SquarePants"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         }

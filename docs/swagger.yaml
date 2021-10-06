@@ -24,6 +24,8 @@ definitions:
       name:
         example: SpongeBob SquarePants
         type: string
+      status:
+        type: integer
     type: object
 info:
   contact:
@@ -92,6 +94,32 @@ paths:
       tags:
       - user
   /v1/users/{userID}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes user
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+      summary: Deletes user
+      tags:
+      - user
     get:
       consumes:
       - application/json
@@ -163,4 +191,36 @@ paths:
       summary: Updates user
       tags:
       - user
+  /v1/users/status/{status}:
+    get:
+      consumes:
+      - application/json
+      description: Gets get all users by status
+      parameters:
+      - description: User status
+        in: path
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/user.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/user.User'
+                  type: array
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/user.ResponseHTTP'
+      summary: Gets get all users by status
+      tags:
+      - users
 swagger: "2.0"
