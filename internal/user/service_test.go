@@ -236,3 +236,51 @@ func Test_userService_DeleteUser(t *testing.T) {
 		})
 	}
 }
+
+func Test_userService_GetUsersByStatus(t *testing.T) {
+	type fields struct {
+		userRepository UserRepository
+	}
+	type args struct {
+		ctx    context.Context
+		status UserStatus
+	}
+
+	a := args{
+		ctx:    context.TODO(),
+		status: Active,
+	}
+
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *[]User
+		wantErr bool
+	}{
+
+		{
+			name: "Get User by id",
+			args: a,
+			want: &[]User{*mockedUser},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &userService{
+				userRepository: mockedRepo,
+			}
+			got, err := s.GetUsersByStatus(tt.args.ctx, tt.args.status)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("userService.GetUsersByStatus() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("userService.GetUsersByStatus() = %v, want %v", got, tt.want)
+			}
+			if mockedRepo.GetUsersByStatusCount != 1 {
+				t.Errorf("Expected userRepository.GetUsersByStatus() count of calls: %v, but actuall: %v", 1, mockedRepo.GetUsersByStatusCount)
+			}
+		})
+	}
+}

@@ -38,3 +38,7 @@ func (s *userService) UpdateUser(ctx context.Context, userID int, user *User) er
 func (s *userService) DeleteUser(ctx context.Context, userID int) error {
 	return s.userRepository.DeleteUser(ctx, userID)
 }
+
+func (s *userService) GetUsersByStatus(ctx context.Context, status UserStatus) (*[]User, error) {
+	return s.userRepository.GetUsersByStatus(ctx, status)
+}
