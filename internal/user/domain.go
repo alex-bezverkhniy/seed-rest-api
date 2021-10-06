@@ -13,7 +13,7 @@ type User struct {
 	Address  string     `json:"address" example:"Pineapple, Bikini Bottom"`
 	Created  int64      `json:"created",omitempty`
 	Modified int64      `json:"modified",omitempty`
-	Status   UserStatus `json:"status" example:"Active"`
+	Status   UserStatus `json:"status",omitempty`
 }
 
 // Represent the 'User' status
