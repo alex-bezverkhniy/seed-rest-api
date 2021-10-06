@@ -28,11 +28,11 @@ func Test_UserRepository_GetUsers(t *testing.T) {
 
 	db, mock := newSqlMock(t)
 	defer db.Close()
-	columns := []string{"id", "name", "address", "created", "modified"}
+	columns := []string{"id", "name", "address", "status", "created", "modified"}
 	mock.ExpectQuery("^SELECT (.*) FROM users$").
 		WillReturnRows(sqlmock.
 			NewRows(columns).
-			FromCSVString("0,Test,TestAddress,123,321"))
+			FromCSVString("0,Test,TestAddress,1,123,321"))
 
 	f := fields{
 		maridb: db,
@@ -53,7 +53,7 @@ func Test_UserRepository_GetUsers(t *testing.T) {
 			name:    "Get all users",
 			fields:  f,
 			args:    a,
-			want:    &[]User{{ID: 0, Name: "Test", Address: "TestAddress", Created: 123, Modified: 321}},
+			want:    &[]User{{ID: 0, Name: "Test", Address: "TestAddress", Status: Active, Created: 123, Modified: 321}},
 			wantErr: false,
 		},
 	}

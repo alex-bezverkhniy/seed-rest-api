@@ -36,7 +36,7 @@ func (r *mariaDBRepository) GetUsers(ctx context.Context) (*[]User, error) {
 
 	for res.Next() {
 		user := &User{}
-		err = res.Scan(&user.ID, &user.Name, &user.Address, &user.Created, &user.Modified)
+		err = res.Scan(&user.ID, &user.Name, &user.Address, &user.Status, &user.Created, &user.Modified)
 		if err != nil && err == sql.ErrNoRows {
 			return nil, nil
 		}
