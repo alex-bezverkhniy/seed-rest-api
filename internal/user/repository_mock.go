@@ -12,7 +12,7 @@ type MockedUserRepository struct {
 }
 
 var (
-	mockedUser = &User{ID: 1, Name: "MockedUser", Address: "TestAddress", Created: 123, Modified: 321}
+	mockedUser = &User{ID: 1, Name: "MockedUser", Address: "TestAddress", Status: Active, Created: 123, Modified: 321}
 )
 
 // Create a new repository with MariaDB as the driver

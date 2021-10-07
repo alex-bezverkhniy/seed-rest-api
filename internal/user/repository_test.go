@@ -32,7 +32,7 @@ func Test_UserRepository_GetUsers(t *testing.T) {
 	mock.ExpectQuery("^SELECT (.*) FROM users$").
 		WillReturnRows(sqlmock.
 			NewRows(columns).
-			FromCSVString("0,Test,TestAddress,1,123,321"))
+			FromCSVString("0,Test,TestAddress,active,123,321"))
 
 	f := fields{
 		maridb: db,
@@ -382,11 +382,11 @@ func Test_mariaDBRepository_GetUsersByStatus(t *testing.T) {
 				}
 
 				prep.ExpectQuery().
-					WithArgs(1).
+					WithArgs("active").
 					WillReturnRows(rows)
 			} else {
 				prep.ExpectQuery().
-					WithArgs(1).
+					WithArgs("active").
 					WillReturnError(sql.ErrNoRows)
 			}
 

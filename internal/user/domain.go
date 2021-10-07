@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"strings"
 )
 
@@ -17,12 +16,12 @@ type User struct {
 }
 
 // Represent the 'User' status
-type UserStatus int
+type UserStatus string
 
 const (
-	Active UserStatus = iota + 1
-	Blocked
-	Inactive
+	Active   UserStatus = "active"
+	Blocked  UserStatus = "blocked"
+	Inactive UserStatus = "inactive"
 )
 
 // Our repository will implement these methods.
@@ -45,14 +44,6 @@ type UserService interface {
 	DeleteUser(ctx context.Context, userID int) error
 }
 
-func (s UserStatus) String() string {
-	seasons := [...]string{"active", "blocked", "inactive"}
-	if s < Active || s > Inactive {
-		return fmt.Sprintf("UserStatus(%d)", int(s))
-	}
-	return seasons[s-1]
-}
-
 func (s UserStatus) FromString(str string) UserStatus {
 	switch strings.ToLower(str) {
 	case "active":
@@ -62,5 +53,5 @@ func (s UserStatus) FromString(str string) UserStatus {
 	case "inactive":
 		return Inactive
 	}
-	return Active
+	return Inactive
 }

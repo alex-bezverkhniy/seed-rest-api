@@ -16,16 +16,16 @@ CREATE TABLE users (
 
 -- Populate table with 10 users.
 INSERT INTO users VALUES
-(1, 'Sayu Ogiwara', 'Hokkaido, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(2, 'Chizuru Ichinose', 'Tokyo, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(3, 'Asagi Aiba', 'Kyoto, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(4, 'Rin Tohsaka', 'Kobe, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(5, 'Mai Sakurajima', 'Fujisawa, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(6, 'Aki Adagaki', 'Fukuoka, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(7, 'Asuna Yuuki', 'Shinagawa, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(8, 'Ruka Sarashina', 'Gotenba, Japan', 'Active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(9, 'Miyuki Shiba', 'Nagano, Japan', 'Inactive', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
-(10, 'Fumino Furuhashi', 'Niigata, Japan', 'Inactive', UNIX_TIMESTAMP(), UNIX_TIMESTAMP());
+(1, 'Sayu Ogiwara', 'Hokkaido, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(2, 'Chizuru Ichinose', 'Tokyo, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(3, 'Asagi Aiba', 'Kyoto, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(4, 'Rin Tohsaka', 'Kobe, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(5, 'Mai Sakurajima', 'Fujisawa, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(6, 'Aki Adagaki', 'Fukuoka, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(7, 'Asuna Yuuki', 'Shinagawa, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(8, 'Ruka Sarashina', 'Gotenba, Japan', 'active', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(9, 'Miyuki Shiba', 'Nagano, Japan', 'inactive', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()),
+(10, 'Fumino Furuhashi', 'Niigata, Japan', 'inactive', UNIX_TIMESTAMP(), UNIX_TIMESTAMP());
 
 -- Create another sample table.
 CREATE TABLE cities (
