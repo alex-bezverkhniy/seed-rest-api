@@ -20,7 +20,10 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gofiber/fiber v1.13.3 // indirect
 	github.com/gofiber/fiber/v2 v2.18.0 // indirect
+	github.com/gofiber/jwt/v2 v2.2.7 // indirect
 	github.com/gofiber/utils v0.0.9 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/golang-jwt/jwt/v4 v4.0.0 // indirect
 	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.13.4 // indirect
