@@ -1,3 +1,6 @@
+# seed-rest-api
+Seed project for generic REST API based on [gofiber framework](https://gofiber.io)
+
 ## Generate docs and spec
 ```
 swag init -d ./cmd/seed-rest-api,./internal/user
